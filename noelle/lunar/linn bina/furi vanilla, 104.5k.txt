@@ -1,0 +1,64 @@
+// NEEDS SUB + ROTA OVERHAUL
+// 38:29:24:9 noelle linn bina furi
+// 39.3k noelle personal, out of which 24k is lcrys, ~61% distrib
+
+#by antigua, 22.5s rota
+
+noelle char lvl=90/90 cons=6 talent=9,9,9;
+noelle add weapon="serpentspine" refine=1 lvl=90/90  +params=[stacks=5];
+noelle add set="nightoftheskysunveiling" count=4;
+noelle add stats hp=4780 atk=311 er=0.518 def%=0.583 cd=0.622;
+noelle add stats hp=507.88 hp%=0.0991 atk=33.07 atk%=0.0991 def=39.35 def%=0.062*5 em=39.63 er=0.1101 cr=0.0331*11 cd=0.0662*10;
+
+furina char lvl=90/90 cons=0 talent=9,9,9;
+furina add weapon="favoniussword" refine=3 lvl=90/90;
+furina add set="silkenmoonsserenade" count=4;
+furina add stats hp=4780 atk=311 hp%=0.466 hydro%=0.466 cr=0.311;
+furina add stats hp=507.88 hp%=0.0492*4 atk=33.07 atk%=0.0991 def=39.35 def%=0.1239 em=39.63 er=0.0551*2 cr=0.0331*10 cd=0.0662*12;
+
+columbina char lvl=90/90 cons=0 talent=9,9,9;
+columbina add weapon="sacjade" refine=1 lvl=90/90;
+columbina add set="morningstar" count=4;
+columbina add stats hp=4780 atk=311 hp%=0.466 em=187 cd=0.622; #main
+columbina add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*7 atk=16.54*2 atk%=0.0496*2 er=0.0551*2 em=19.82*4 cr=0.0331*7 cd=0.0662*10;
+
+linnea char lvl=90/90 cons=0 talent=9,9,9;
+linnea add weapon="slingshot" refine=5 lvl=90/90;
+linnea add set="morningstar" count=4;
+linnea add stats hp=4780 atk=311 def%=0.583 def%=0.583 cd=0.622;
+linnea add stats hp=507.88 hp%=0.0991 atk=33.07 atk%=0.0991 def=39.35 def%=0.062*4 em=19.82*2 er=0.0551*2 cr=0.0331*12 cd=0.0662*10;
+
+
+# Options
+options iteration=1000; 
+options swap_delay=12;
+energy every interval=480,720 amount=1;
+
+# Targets
+target lvl=100 resist=0.1 radius=2 pos=0,2.3 hp=100000000;
+
+# Rotation
+active noelle; # SS Stacks
+let hasDowntime = 0;
+
+for let i = 0; i < 4; i = i + 1 {
+  furina skill, dash, burst;
+  
+  if .columbina.burst.ready {
+    columbina skill, burst; 
+    hasDowntime = 0;
+  }
+  else { 
+    columbina skill, attack; 
+    hasDowntime = 1;
+  }
+  
+  linnea attack, skill;
+  noelle skill, burst, attack:3, dash, attack:3, dash, attack:3, dash, attack:3, dash, attack:3, dash;
+  if hasDowntime == 0 {
+	noelle attack:2;	// haven't actually found a way to exploit downtime on this sim yet
+  }
+  else { 
+	noelle attack:2;
+	}
+}

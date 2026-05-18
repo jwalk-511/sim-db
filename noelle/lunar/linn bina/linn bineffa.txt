@@ -1,0 +1,73 @@
+// aka "what if i have bineffa but no xilonen". for comparison's sake, bineffa xilo 18+18 is 101k...
+// 22s rota, probably benefits from 18+18 version. subs not optimized. it's 3 cost and worse than gorou but hey, it's fun
+// bina and ineffa alternate Qs. ineffa ER subs are a net dps gain
+
+#og by antigua but pkach stole it to add illuga then stole her own sim to add ineffa 
+
+noelle char lvl=90/90 cons=6 talent=9,9,9;
+# Weapon
+noelle add weapon="serpentspine" refine=1 lvl=90/90  +params=[stacks=5];
+# Artifact Set
+# noelle add set="sms" count=4;   // DPS loss over NotSU Noelle + SMS Bina
+noelle add set="notsu" count=4;
+# Main stats
+noelle add stats hp=4780 atk=311 er=0.518 geo%=0.466 cd=0.622;
+# Sub stats
+noelle add stats hp=507.88 hp%=0.0991 atk=33.07 atk%=0.0991 def=39.35 def%=0.062*6 em=39.63 er=0.0551*5 cr=0.0331*7 cd=0.0662*10;
+
+ineffa char lvl=90/90 cons=0 talent=9,9,9;
+ineffa add weapon="deathmatch" refine=1 lvl=90/90;
+ineffa add set="morningstar" count=5;
+ineffa add stats hp=4780 atk=311 atk%=0.466 atk%=0.466 cd=0.622 ; #main
+ineffa add stats def=39.36 def%=0.124 hp=507.88 hp%=0.0992 atk=33.08 atk%=0.0496*2 er=0.0551*6 em=39.64 cr=0.0331*9 cd=0.0662*11 ;
+
+columbina char lvl=90/90 cons=0 talent=9,9,9;
+columbina add weapon="sacjade" refine=1 lvl=90/90;
+columbina add set="sms" count=4;
+# columbina add set="morningstar" count=4;    // DPS loss over NotSU Noelle + SMS Bina
+columbina add stats hp=4780 atk=311 hp%=0.466 hp%=0.466 cd=0.622; #main
+columbina add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*8 atk=16.54*2 atk%=0.0496*2 er=0.0551*4 em=19.82*3 cr=0.0331*5 cd=0.0662*10;
+
+linnea char lvl=90/90 cons=0 talent=9,9,9;
+# Weapon
+linnea add weapon="slingshot" refine=5 lvl=90/90;
+# Artifact Set
+linnea add set="morningstar" count=4;
+# Main stats
+linnea add stats hp=4780 atk=311 def%=0.583 def%=0.583 cd=0.622;
+# Sub stats
+linnea add stats hp=507.88 hp%=0.0991 atk=33.07 atk%=0.0991 def=39.35 def%=0.3717 em=39.63 er=0.1101 cr=0.3305 cd=0.6605;
+
+
+# Options
+options iteration=1000; 
+options swap_delay=12;
+energy every interval=480,720 amount=1;
+
+# Targets
+target lvl=100 resist=0.1 radius=2 pos=0,2.3 hp=100000000;
+
+# Rotation
+active noelle; # SS Stacks
+
+for let i = 0; i < 4; i = i + 1 {
+  if is_even(i) {
+  columbina skill, burst; 
+  }
+  else { 
+    columbina skill, attack:2;
+  }
+  
+  if !is_even(i) { 
+    ineffa skill, burst;  
+  }
+  else {
+    ineffa attack, skill; 
+  }
+  
+  linnea attack:1, skill;
+  noelle skill, burst, attack:3, dash, attack:3, dash, attack:3, dash, attack:3, dash, attack:3, dash, attack:2;
+  
+
+  
+}

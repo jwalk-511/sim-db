@@ -1,0 +1,133 @@
+# Originally from dalp, at 113k with C1tao C4mona. Assumes fairly old acc. Subs not really optimized
+# This version is at a ~19s rota, 108k with Shime and 100% HP start
+
+// celestial gift set + minor optimizations push the original 113 to like 130
+// I tried to make it a little bit more realistic (9N2CD N1CD, then 8N2CD N1CD N1C)...
+// then i figured "hey kqms delay should help make it more realistic" and chose the less bad option...
+
+
+# KQMS KOLIBRI DELAY, NO ATTACK AND SWAP Q VERSION
+
+fn rand_delay(mean, stddev, min, max) {
+  # randnorm has mean: 0 and stddev: 1, so this makes it have mean and stddev from input
+  let del = randnorm() * stddev + mean;
+  
+  # truncate random value according to min and max
+  if del < min {
+    del = min;
+  } else if del > max {
+    del = max;
+  }
+  delay(del);
+}
+
+let prev_char_id = -1;
+let prev_action_id = -1;
+
+let _execute_action = execute_action;
+fn execute_action(char_id number, action_id number, p map) {
+
+  # this next if block handles implict swap or otherwise any pre swap delay specified in this function will not work
+  if prev_char_id != char_id && action_id != .action.swap {
+    execute_action(char_id, .action.swap, []);
+  }
+
+  if action_id == .action.swap {
+    rand_delay(14, 4, 6, 20);
+  } else if prev_action_id == .action.attack && action_id == .action.attack {
+  } else if prev_action_id == .action.attack && action_id == .action.charge {
+  } else if prev_action_id == .action.swap && action_id == .action.burst {
+  } else if prev_action_id != .action.swap  {
+    rand_delay(2, 4, 0, 8);
+  } else if prev_action_id == .action.swap {
+    rand_delay(12, 6, 6, 18);
+  }
+
+  # this here tracks the previous character id so that it can be used above
+  prev_char_id = char_id;
+  prev_action_id = action_id;
+  return _execute_action(char_id, action_id, p);
+}
+
+
+###########################################
+###########################################
+
+
+hutao char lvl=90/90 cons=1 talent=9,9,9 ;        // if not running +params=[start_hp%=1], you ideally don't want to ever burst
+hutao add weapon="fjords" refine=1 lvl=90/90;
+hutao add set="shimenawa" count=4;                // MH with Mona PAmber is a scam so we're not doing that here
+#hutao add set="cw" count=4;                      // minor loss over Shime if you never burst
+hutao add stats hp=4780 atk=311 hp%=0.466 pyro%=0.466 cd=0.622 ; #main
+hutao add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*4 atk=16.54*2 atk%=0.0496*2 er=0.0551*2 em=19.82*2 cr=0.0331*12 cd=0.0662*10;
+
+mona char lvl=90/90 cons=4 talent=9,9,9;
+mona add weapon="favcodex" refine=5 lvl=90/90;    // R5 Fav fairly safe assumption, Codex isn't often used elsewhere
+mona add set="hg" count=4;
+mona add stats hp=4780 atk=311 er=0.518 hydro%=0.466 cr=0.311 ; #main
+mona add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 er=0.0551*4 em=19.82*2 cr=0.0331*10 cd=0.0662*12;
+
+fischl char lvl=90/90 cons=6 talent=9,9,9;
+// fischl add weapon="amos" refine=1 lvl=90/90;    // Unluckiest of the standard banner options
+fischl add weapon="thestringless" refine=5 lvl=90/90;
+fischl add set="gt" count=4;
+fischl add stats hp=4780 atk=311 atk%=0.466 electro%=0.466 cr=0.311 ; #main
+fischl add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*4 er=0.0551*2 em=19.82*2 cr=0.0331*10 cd=0.0662*12;
+
+yelan char lvl=90/90 cons=0 talent=9,9,9;
+yelan add weapon="favbow" refine=5 lvl=90/90;
+yelan add set="no" count=4;
+yelan add stats hp=4780 atk=311 er=0.518 hydro%=0.466 cr=0.311 ; #main
+yelan add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*5 atk=16.54*2 atk%=0.0496*2 er=0.0551*2 em=19.82*2 cr=0.0331*9 cd=0.0662*12;
+// yelan add weapon="slingshot" refine=5 lvl=90/90;
+// yelan add set="eosf" count=4;
+// yelan add stats hp=4780 atk=311 er=0.518 hydro%=0.466 cd=0.622 ; #main
+// yelan add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 er=0.0551*6 em=19.82*2 cr=0.0331*10 cd=0.0662*10;
+
+options swap_delay=12 iteration=1000;
+target lvl=100 resist=.1 hp=9999999999 radius=2 pos=0,2.4;
+energy every interval=480,720 amount=1;
+
+active mona;
+
+for let i = 0; i < 6; i = i + 1 {
+  
+  // Commented sections are to adjust for random delay
+  mona skill;
+  // mona attack;
+
+  yelan skill, burst;
+  // yelan attack;
+  
+  if .fischl.skill.ready {
+    // fischl attack, skill;
+    fischl skill;
+  } else {
+    // fischl attack:2, burst;
+    fischl attack, burst;
+  }
+  
+  mona burst, attack;
+  // wait(17);
+  // mona attack;                 // DPS loss even without random delay and even without C2+
+  
+  tao skill,                      // 8N2CD N1CD; Q version is mostly to account for survivability
+  // attack:2, charge, dash,      // extra CA of any form is a loss if random delay unless you scam it
+  attack:2, charge, dash,
+  attack:2, charge, dash,
+  attack:2, charge, dash, 
+  attack:2, charge, dash,
+  attack:2, charge, dash,
+  attack:2, charge, dash,
+  attack:2, charge, dash,    
+  attack:1, charge, dash;
+  // if .tao.burst.ready {
+  //   tao attack, burst;         // survivability version with CW; significant loss if not running +params=[start_hp%=1]
+  // }
+  // else { 
+  //   tao attack:1, charge; 
+  // } 
+  tao attack:1, charge;
+}
+
+

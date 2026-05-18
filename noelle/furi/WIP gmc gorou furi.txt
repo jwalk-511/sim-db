@@ -1,0 +1,57 @@
+noelle char lvl=90/90 cons=6 talent=9,9,9;
+// Weapons
+noelle add weapon="serpentspine" refine=1 lvl=90/90  +params=[stacks=5];
+#noelle add weapon="redhorn" refine=1 lvl=90/90;
+#noelle add weapon="whiteblind" refine=5 lvl90/90;
+// Artifact sets
+#noelle add set="notsu" count=4;
+noelle add set="mh" count=4;
+#noelle add set="husk" count=4 	+params=[stacks=4];
+// Main stats
+noelle add stats hp=4780 atk=311 def%=0.583 def%=0.583 cd=0.622;
+// Sub stats
+noelle add stats hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 def=19.68*2 def%=0.062*2 em=19.82*2 er=0.0551*6 cr=0.0331*10 cd=0.0662*10;   // SS, CD hat
+#noelle add stats def%=0.062*5 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 er=0.0551*4 em=19.82*2 cr=0.0331*10 cd=0.0662*9;   // Redhorn, CR hat
+
+gorou char lvl=90/90 cons=6 talent=9,9,9;
+gorou add weapon="favbow" refine=4 lvl=90/90;
+gorou add set="exile" count=4;
+gorou add set="eosf" count=1;
+gorou add stats hp=4780 atk=311 er=0.518 def%=0.435 cr=0.232; 		// 5-star ER sands; capped KQMS ER here is ~277%
+gorou add stats def%=0.062*0.8*4 def=19.68*0.8*2 hp=253.94*0.8*2 hp%=0.0496*0.8*2 atk=16.54*0.8*2 atk%=0.0496*0.8*2 er=0.0551*0.8*2 em=19.82*0.8*2 cr=0.0331*2 cr=0.0331*0.8*10 cd=0.0662*0.8*12;		// 5* ER sands has KQMS cap of 2 CR rolls
+
+luminegeo char lvl=90/90 cons=6 talent=1,9,9;
+luminegeo add weapon="pipe" refine=5 lvl=90/90;
+luminegeo add set="scroll" count=4;
+#luminegeo add set="gt" count=4;
+luminegeo add stats atk%=0.466 geo%=0.466 cr=0.311;
+luminegeo add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*4 er=0.0551*2 em=19.82*2 cr=0.0331*10 cd=0.0662*12;
+
+furina char lvl=90/90 cons=0 talent=9,9,9;
+furina add weapon="favsword" refine=3 lvl=90/90;
+#furina add set="sms" count=4;
+#furina add set="totm" count=4;
+furina add set="gt" count=4;
+furina add stats hp=4780 atk=311 er=0.518 hp%=0.466 cr=0.311; #main
+furina add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*4 atk=16.54*2 atk%=0.0496*2 er=0.0551*2 em=19.82*2 cr=0.0331*10 cd=0.0662*12;
+
+# Options
+options iteration=1000; 
+options swap_delay=12;
+energy every interval=480,720 amount=1;
+
+# Targets
+target lvl=100 resist=0.1 radius=2 pos=0,2.3 hp=100000000;
+
+# Rotation
+active noelle; # SS Stacks
+
+for let i = 0; i < 4; i = i + 1 {
+  furina skill, dash, attack, burst;
+  luminegeo skill[hold=1], burst;
+  gorou attack, skill, burst;
+  noelle burst, skill, attack:3, dash, attack:2;
+  luminegeo skill[hold=1];
+  gorou attack:2, skill;
+  noelle attack:3, dash, attack:4;
+}

@@ -1,0 +1,60 @@
+// https://wfpsim.com/sh/a842200c-8c2a-4c0b-baac-128a184b4f06
+// 86.2k, distrib 44:25:24 noelle furi bina
+// noelle's lcrys damage is almost 50% of her total
+
+#honestly this is by antigua.
+#technically it's by pkach salvaging what he did a month earlier by mixing newer antigua sims
+#but pkach cannot in good conscience claim ANY of it as hers lol
+#signed, pkach
+
+noelle char lvl=90/90 cons=6 talent=9,9,9;
+noelle add weapon="serpentspine" refine=1 lvl=90/90  +params=[stacks=5];
+noelle add set="mh" count=4;
+noelle add stats hp=4780 atk=311 def%=0.583 geo%=0.466 cd=0.622;
+noelle add stats hp=507.88 hp%=0.0991 atk=33.07 atk%=0.0991 def=39.35 def%=0.062*6 em=39.63 er=0.1101 cr=0.0331*10 cd=0.0662*10;
+
+xilonen char lvl=90/90 cons=0 talent=9,9,9; 
+xilonen add weapon="favsword" refine=3 lvl=90/90;
+xilonen add set="scroll" count=4;
+xilonen add stats hp=4780 atk=311 def%=0.583 def%=0.583 cr=0.311; #main
+xilonen add stats def%=0.248 def=39.36 hp=507.88 hp%=0.0992 atk=33.08 atk%=0.0992 er=0.1102 em=39.64 cr=0.331 cd=0.7944;
+
+columbina char lvl=90/90 cons=0 talent=9,9,9;
+columbina add weapon="sacjade" refine=1 lvl=90/90;
+columbina add set="sms" count=4;
+columbina add stats hp=4780 atk=311 hp%=0.466 em=187 cd=0.622; #main
+columbina add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*7 atk=16.54*2 atk%=0.0496*2 er=0.0551*4 em=19.82*2 cr=0.0331*7 cd=0.0662*10;
+
+furina char lvl=90/90 cons=0 talent=9,9,9;
+furina add weapon="festeringdesire" refine=5 lvl=90/90;
+furina add set="gt" count=4;
+furina add stats hp=4780 atk=311 hp%=0.466 hp%=0.466 cd=0.622;
+furina add stats hp=507.88 hp%=0.1982 atk=33.07 atk%=0.0991 def=39.35 def%=0.1239 em=39.63 er=0.1101*2 cr=0.0331*12 cd=0.0662*10;
+
+
+# Options
+options iteration=1000; 
+options swap_delay=12;
+energy every interval=480,720 amount=1;
+
+# Targets
+target lvl=100 resist=0.1 radius=2 pos=0,2.3 hp=100000000;
+
+# Rotation
+active noelle; # SS Stacks
+
+for let i = 0; i < 4; i = i + 1 {
+ furina skill, dash, burst;
+  if .columbina.burst.ready {
+    columbina skill, burst; 
+  }
+  else { 
+    columbina skill, attack:2; 
+  }
+  xilonen skill, attack:2;
+  noelle skill, burst, attack:3, dash, attack:3, dash, attack:2;
+  xilonen skill, attack:2;
+  noelle attack:3, dash, attack:3, dash, attack:3;
+}
+
+// ANTI YOUR WORK IS ALIVE AND WELL, HERE'S THE GODDAMN PROOF

@@ -1,0 +1,87 @@
+// 17+17s yunjin ATTEMPT! the idea is that yunjin has short cooldowns, furi buffs the quills, and yunjin gets RR energy refund twice.
+// (and preferably do this in 2T+ to actually consume all of them).
+// but I CANNOT for the life of me line it up so that yunjin receives both heals. fk me, i'll just stick to 22s rota...
+
+// 17+17s has awful relative shield/heal uptime anyway, i was thinking it'd be 3 heals but nope, it's 2
+// also, this is quite a bit longer than 17+17 atm, ~3s longer or so.
+
+#by pkach
+
+noelle char lvl=90/90 cons=6 talent=9,9,9;
+# Weapon
+noelle add weapon="serpentspine" refine=1 lvl=90/90  +params=[stacks=5];
+# Artifact Set
+noelle add set="notsu" count=4;
+# Main stats
+noelle add stats hp=4780 atk=311 def%=0.583 geo%=0.466 cd=0.622;
+# Sub stats
+noelle add stats def%=0.062*4 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 er=0.0551*6 em=19.82*2 cr=0.0331*8 cd=0.0662*10;
+
+yunjin char lvl=90/90 cons=6 talent=9,9,9;
+yunjin add weapon="rightfulreward" refine=5 lvl=90/90;
+#yunjin add weapon="footprint" refine=5 lvl=90/90;
+#yunjin add set="husk" count=4 	+params=[stacks=4];
+yunjin add set="scroll" count=4;
+yunjin add stats hp=4780 atk=311 er=0.518 def%=0.583 def%=0.583; #main
+yunjin add stats def%=0.062*8 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 er=0.0551*100 em=19.82*2 cr=0.0331*7 cd=0.0662*2;
+
+columbina char lvl=90/90 cons=0 talent=9,9,9;
+columbina add weapon="sacjade" refine=1 lvl=90/90;
+columbina add set="morningstar" count=4;
+columbina add stats hp=4780 atk=311 hp%=0.466 hp%=0.466 cd=0.622; #main
+columbina add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 er=0.0551*2 em=19.82*9 cr=0.0331*4 cd=0.0662*13;
+
+furina char lvl=90/90 cons=0 talent=9,9,9;
+furina add weapon="favsword" refine=3 lvl=90/90;
+furina add set="sms" count=4;		// This ER is only possible in KQMS because of SMS 2p
+#furina add set="totm" count=4;	
+furina add stats hp=4780 atk=311 er=0.518 hp%=0.466 cr=0.311; #main
+furina add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 er=0.0551*10 em=19.82*2 cr=0.0331*10 cd=0.0662*6;
+
+
+# Options
+options iteration=1000; 
+options swap_delay=12;
+energy every interval=480,720 amount=1;
+
+# Targets
+target lvl=100 resist=0.1 radius=2 pos=0,2.3 hp=100000000;
+
+# Rotation
+active noelle; # SS Stacks
+let burstHappened = 0;		// Tracks downtime
+
+for let i = 0; i < 4; i = i + 1 {
+  furina skill, dash, attack, burst;    // ~ +4s compared to linn tE
+  if .columbina.burst.ready {
+    columbina skill, burst; 
+    burstHappened = 1;
+  } else {
+    columbina skill;
+    burstHappened = 0;
+  }
+  
+  yunjin burst, skill;		// missing maybe ~1s compared to illu EQN1, which this is based on?
+  noelle skill, burst, attack:3, dash, attack:3, dash;		// EQ is technically a very minor dps gain, but you lose shield uptime, which is very important for split rota
+  yunjin skill;
+  noelle attack:3;
+  // noelle dash;
+  // if burstHappened == 1 { 
+  //   noelle attack:3;
+  // } else { 
+  //   noelle attack:3, dash, attack:1;    // also worth trying N4
+  // }
+  
+  #################################
+  
+  furina attack:2, burst;   // ~ +2s compared to linn tE, but she did have ~0.8s swap delay per rota
+  if .columbina.burst.ready {
+    columbina skill, burst; 
+  } else {
+    columbina skill;
+  }
+  yunjin skill, burst;
+  noelle attack:3, dash, attack:3, dash, attack:2;
+  yunjin skill;
+  noelle attack:3, dash, attack:3;
+}
