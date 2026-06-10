@@ -1,0 +1,6 @@
+- Add Rez Navia sims somehow... surely this will be simple... haha...
+- Split Ellie, Enig and Dalp sims
+- Run opti on literally everything, rerun Noille on comfsim
+- Remove redundant sims
+- For Noille: 0 energy start, high invest, C0~C1 cope
+- Start simming Ning and Itto
