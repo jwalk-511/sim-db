@@ -178,7 +178,7 @@ durin add set="risingwinds" count=4;
 #durin add set="hg" count=4;
 durin add stats hp=4780 atk=311 atk%=0.466 pyro%=0.466 cr=0.311;		// ATK% sands
 #durin add stats hp=4780 atk=311 er=0.518 pyro%=0.466 cr=0.311;		// ER sands
-durin add stats def%=0.124 def=39.36 hp=507.88 hp%=0.0992 atk=33.08 atk%=0.496*2 er=0.0551*4 em=39.64 cr=0.331 cd=0.7944;
+durin add stats def%=0.124 def=39.36 hp=507.88 hp%=0.0992 atk=33.08 atk%=0.0496*2 er=0.0551*4 em=39.64 cr=0.331 cd=0.7944;
 
 == ER NICOLE ==
 
